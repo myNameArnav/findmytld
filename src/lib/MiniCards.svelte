@@ -1,58 +1,57 @@
 <script lang="ts">
-    export let domain = '';
-    export let tld = '';
+	export let domain = '';
+	export let tld = '';
 
-    let url = `${domain.toLowerCase()}.${tld.toLowerCase()}`;
-    let status: boolean | null = null;
+	let url = `${domain.toLowerCase()}.${tld.toLowerCase()}`;
+	let status: boolean | null = null;
 
-    $: getStatus(url).then(result => {
-        status = result;
-    });
+	$: getStatus(url).then((result) => {
+		status = result;
+	});
 
-    function getStatus(url: string): Promise<boolean> {
-        const myHeaders = new Headers();
-        myHeaders.append("accept", "application/dns-json");
+	function getStatus(url: string): Promise<boolean> {
+		const myHeaders = new Headers();
+		myHeaders.append('accept', 'application/dns-json');
 
-        const requestOptions = {
-            method: "GET",
-            headers: myHeaders
-        };
+		const requestOptions = {
+			method: 'GET',
+			headers: myHeaders
+		};
 
-        return fetch(`https://cloudflare-dns.com/dns-query?name=${url}`, requestOptions)
-            .then((response) => response.json())
-            .then((result) => {
-                if (result.Status === 0) return false;
-                return true;
-            })
-            .catch((error) => {
-                console.error(error);
-                return false;
-            });
-    }
+		return fetch(`https://cloudflare-dns.com/dns-query?name=${url}`, requestOptions)
+			.then((response) => response.json())
+			.then((result) => {
+				if (result.Status === 0) return false;
+				return true;
+			})
+			.catch((error) => {
+				console.error(error);
+				return false;
+			});
+	}
 </script>
 
 <div class="root">
-    <div class="mini-cards-section">
-        <div class="url">
-            {url}
-        </div>
-        <div class="status">
-            {#if status === null}
-                <span>Loading...</span>
-            {:else if status}
-                <span class="status-icon success"></span>
-            {:else}
-                <span class="status-icon failure"></span>
-            {/if}
-        </div>
-    </div>
+	<div class="mini-cards-section">
+		<div class="url">
+			{tld.toLowerCase()}
+		</div>
+		<div class="status">
+			{#if status === null}
+				<span class="status-icon loading"></span>
+			{:else if status}
+				<span class="status-icon success"></span>
+			{:else}
+				<span class="status-icon failure"></span>
+			{/if}
+		</div>
+	</div>
 </div>
 
 <style>
-
-    .root{
-        font-family: "Space Grotesk", sans-serif;
-    }
+	.root {
+		font-family: 'Space Grotesk', sans-serif;
+	}
 
 	.mini-cards-section {
 		display: flex;
@@ -97,5 +96,8 @@
 	.failure {
 		background-color: #f44336;
 	}
-</style>
 
+	.failure {
+		background-color: #36a8f4;
+	}
+</style>

@@ -1,13 +1,13 @@
 <script>
-    import Search from "$lib/Search.svelte";
+	import Search from '$lib/Search.svelte';
 </script>
 
 <div class="root">
-    <Search/>
+	<Search />
 </div>
 
 <style>
-    .root{
-        height: 88vh;
-    }
+	.root {
+		height: 88vh;
+	}
 </style>
