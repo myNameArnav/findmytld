@@ -97,7 +97,7 @@
 		background-color: #f44336;
 	}
 
-	.failure {
+	.loading {
 		background-color: #36a8f4;
 	}
 </style>
