@@ -1,6 +1,5 @@
 <script lang="ts">
 	export let inputValue: string = '';
-
 	function isValidDomain(domain: string): boolean {
 		const domainRegex = /^(?!\-)([a-zA-Z0-9\-]{1,63})(?<!\-)(\.[a-zA-Z0-9\-]{1,63})*$/;
 		return domainRegex.test(domain);
@@ -8,7 +7,7 @@
 </script>
 
 <div class="root">
-	<form action={`/scanner/${inputValue}`} class="root-form" autocomplete="off">
+	<form action={`/${inputValue}`} class="root-form" autocomplete="off">
 		<input
 			class="form-domain"
 			type="text"
@@ -25,22 +24,29 @@
 	.root {
 		font-family: 'Space Grotesk', sans-serif;
 		display: flex;
+		justify-content: center;
+		align-items: center;
 		margin-bottom: 2rem;
 	}
 
 	.root-form {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		gap: 1rem;
+		width: 100%;
+		max-width: 600px;
 		margin: 0 auto;
 	}
 
 	/* Form input styles */
 	.form-domain {
-		padding: 25px;
+		padding: 1.25rem;
 		border: 2px solid #ddd;
 		outline: none;
 		transition: all 0.3s ease;
 		box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-		width: 30rem;
-		height: 2rem;
+		width: 100%;
 		font-size: 1.25rem;
 		background-color: white;
 		border-radius: 10px;
@@ -59,10 +65,7 @@
 		background-color: #007bff;
 		border: none;
 		border-radius: 10px;
-		margin-top: 1rem;
 		cursor: pointer;
-		justify-content: center;
-		align-items: center;
 		box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
 		transition: background-color 0.3s ease;
 	}
@@ -82,43 +85,34 @@
 		box-shadow: 0px 4px 6px rgba(0, 123, 255, 0.2);
 	}
 
-	@media (max-width: 700px) {
-		.root {
-			display: flex;
-			flex-wrap: wrap;
-		}
-
+	/* Desktop styles */
+	@media (min-width: 769px) {
 		.root-form {
-			margin: 0 auto;
+			flex-direction: row;
 		}
 
 		.form-domain {
-			width: 30rem;
+			width: 30rem; /* Text input width as before */
 		}
 
 		.form-submit {
-			/* background-size: 30px; */
-			width: 30rem;
+			width: auto; /* Small button beside input */
+			padding: 15px 25px;
 		}
 	}
 
-	@media (max-width: 500px) {
-		.root {
-			display: flex;
-			flex-wrap: wrap;
-		}
-
+	/* Mobile styles */
+	@media (max-width: 768px) {
 		.root-form {
-			margin: 0 auto;
+			flex-direction: column; /* Stack input and button vertically */
 		}
 
 		.form-domain {
-			width: 20rem;
+			width: 100%; /* Full width for mobile */
 		}
 
 		.form-submit {
-			/* background-size: 30px; */
-			width: 20rem;
+			width: 100%; /* Submit button matches input width */
 		}
 	}
 </style>
