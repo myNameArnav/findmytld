@@ -6,7 +6,8 @@
 
 	// let tldList: string[] = tlds.allTlds;
 	let tldList: string[] = tlds.top100;
-	let domain = $page.params.slug;
+	// let domain = $page.params.slug;
+	$: domain = $page.params.slug;
 </script>
 
 <div class="root">
@@ -15,7 +16,8 @@
 	</div>
 	<ol class="container">
 		{#each tldList as tld}
-			<li class="mini-cards"><MiniCards {domain} {tld} /></li>{/each}
+			<li class="mini-cards"><MiniCards {domain} {tld} /></li>
+		{/each}
 	</ol>
 </div>
 

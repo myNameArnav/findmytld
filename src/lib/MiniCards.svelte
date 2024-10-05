@@ -2,14 +2,14 @@
 	export let domain = '';
 	export let tld = '';
 
-	let url = `${domain.toLowerCase()}.${tld.toLowerCase()}`;
-	let status: boolean | null = null;
+	$: url = `${domain.toLowerCase()}.${tld.toLowerCase()}`;
+	let status: number | null = null;
 
 	$: getStatus(url).then((result) => {
 		status = result;
 	});
 
-	function getStatus(url: string): Promise<boolean> {
+	function getStatus(url: string): Promise<number> {
 		const myHeaders = new Headers();
 		myHeaders.append('accept', 'application/dns-json');
 
@@ -21,12 +21,11 @@
 		return fetch(`https://cloudflare-dns.com/dns-query?name=${url}`, requestOptions)
 			.then((response) => response.json())
 			.then((result) => {
-				if (result.Status === 0) return false;
-				return true;
+				return parseInt(result.Status);
 			})
 			.catch((error) => {
 				console.error(error);
-				return false;
+				return -1;
 			});
 	}
 </script>
@@ -34,15 +33,19 @@
 <div class="root">
 	<div class="mini-cards-section">
 		<div class="url">
-			{tld.toLowerCase()}
+			{domain.toLowerCase()}<strong>.{tld.toLowerCase()}</strong>
 		</div>
 		<div class="status">
 			{#if status === null}
-				<span class="status-icon loading"></span>
-			{:else if status}
-				<span class="status-icon success"></span>
+				<span class="status-icon loading" title="Loading"></span>
+			{:else if status === 0}
+				<span class="status-icon failure" title="Not Available"></span>
+			{:else if status === 2}
+				<span class="status-icon maybe" title="Server Failure"></span>
+			{:else if status === 5}
+				<span class="status-icon maybe" title="Server Refused"></span>
 			{:else}
-				<span class="status-icon failure"></span>
+				<span class="status-icon success" title="Available"></span>
 			{/if}
 		</div>
 	</div>
@@ -99,5 +102,9 @@
 
 	.loading {
 		background-color: #36a8f4;
+	}
+
+	.maybe {
+		background-color: #f4f136;
 	}
 </style>
