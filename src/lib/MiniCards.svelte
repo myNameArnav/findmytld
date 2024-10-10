@@ -1,9 +1,17 @@
 <script lang="ts">
 	export let domain = '';
 	export let tld = '';
+	import { onMount } from 'svelte';
+
+	let innerWidth = 1080;
+
+	onMount(() => {
+		innerWidth = window.innerWidth;
+	});
 
 	$: url = `${domain.toLowerCase()}.${tld.toLowerCase()}`;
 	let status: number | null = null;
+	let maxDomainLen: number = 8;
 
 	$: getStatus(url).then((result) => {
 		status = result;
@@ -33,7 +41,14 @@
 <div class="root">
 	<div class="mini-cards-section">
 		<div class="url">
-			{domain.toLowerCase()}<strong>.{tld.toLowerCase()}</strong>
+				{#if domain.length >= maxDomainLen && innerWidth > 480}
+					<span title={tld.toLowerCase()}><strong>.{tld.toLowerCase()}</strong>
+					</span>
+				{:else}
+					<span title={domain.toLowerCase()}.{tld.toLowerCase()}>
+						{domain.toLowerCase()}<strong>.{tld.toLowerCase()}</strong>
+					</span>
+				{/if}
 		</div>
 		<div class="status">
 			{#if status === null}
@@ -65,7 +80,7 @@
 		transition: all 0.3s ease;
 		box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
 		width: 15rem;
-		height: 2.5rem;
+		height: auto;
 		font-size: 1.25rem;
 		background-color: white;
 		border-radius: 10px;
@@ -106,5 +121,32 @@
 
 	.maybe {
 		background-color: #f4f136;
+	}
+
+	/* Small mobile screens */
+	@media (max-width: 480px) {
+
+		.root {
+			margin-left: 0 auto;
+		}
+
+		.mini-cards-section {
+			width: 70vw;
+			font-size: 1rem;
+			height: auto;
+			padding: 15px;
+			flex-direction: column;
+			align-items: flex-start;
+			text-align: left;
+		}
+
+		.url {
+			margin-bottom: 10px;
+			white-space: normal;
+		}
+
+		.status {
+			align-self: flex-end;
+		}
 	}
 </style>
