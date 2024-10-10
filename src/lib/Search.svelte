@@ -35,7 +35,7 @@
 		align-items: center;
 		gap: 1rem;
 		width: 100%;
-		max-width: 600px;
+		max-width: 60vw;
 		margin: 0 auto;
 	}
 
@@ -46,15 +46,21 @@
 		outline: none;
 		transition: all 0.3s ease;
 		box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-		width: 100%;
+		width: 70%;
 		font-size: 1.25rem;
 		background-color: white;
 		border-radius: 10px;
 	}
 
+	.form-domain:hover{
+		width: 100%;
+		transition: cubic-bezier(0.6, -0.28, 0.735, 0.045) 0.5s;
+	}
+
 	.form-domain:focus {
 		border-color: #007bff;
 		box-shadow: 0px 4px 6px rgba(0, 123, 255, 0.2);
+		width: 100%;
 	}
 
 	/* Form submit button */

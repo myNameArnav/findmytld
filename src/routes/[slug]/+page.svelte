@@ -4,11 +4,9 @@
 	import { page } from '$app/stores';
 	import * as tlds from './tlds.json';
 
-	// let tldList: string[] = tlds.allTlds;
-	let tldList: string[] = tlds.top100;
-	// let domain = $page.params.slug;
+	let tldList: string[] = tlds.newTop100;
 	$: domain = $page.params.slug;
-</script>
+	</script>
 
 <div class="root">
 	<div class="search">
@@ -23,7 +21,6 @@
 
 <style>
 	.root {
-		/* height: 88vh; */
 		font-family: 'Space Grotesk', sans-serif;
 	}
 
@@ -33,6 +30,6 @@
 		width: 100vw;
 		flex-wrap: wrap;
 		gap: 1rem;
-		margin: 0 auto;
+		margin: 0 10vw;
 	}
 </style>
