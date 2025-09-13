@@ -1,8 +1,13 @@
 /** @type {import('tailwindcss').Config} */
-export default {
-	content: ['./src/**/*.{html,js,svelte,ts}'],
-	theme: {
-		extend: {}
-	},
-	plugins: []
-};
+module.exports = {
+  content: ['./src/**/*.{js,jsx,ts,tsx}'],
+  theme: {
+    extend: {
+      fontFamily: {
+        sans: ['"Space Grotesk"', 'sans-serif'],
+        cursive: ['"Playwrite DE Grund"', 'cursive'],
+      },
+    },
+  },
+  plugins: [],
+}
