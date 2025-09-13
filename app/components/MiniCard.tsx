@@ -1,24 +1,41 @@
-import * as React from "react";
+import { useState, useEffect } from "react";
+import { Ban, CircleAlert, CircleCheck, Loader } from "lucide-react";
+import { cn } from "@/lib/utils";
+import Link from "next/link";
 
 interface StatusIndicatorProps {
 	status: number | null;
 }
 
 const StatusIndicator = ({ status }: StatusIndicatorProps) => {
-	if (status === undefined) {
+	if (status === undefined || status === null) {
 		return (
-			<div className="w-6 h-6 rounded-full bg-blue-500 animate-pulse"></div>
+			<div className="w-6 h-6 rounded-full animate-spin">
+				<Loader />
+			</div>
 		);
 	}
 
 	switch (status) {
 		case 0:
-			return <div className="w-6 h-6 rounded-full bg-red-500"></div>;
+			return (
+				<div className="w-6 h-6 rounded-full">
+					<Ban />
+				</div>
+			);
 		case 2:
 		case 5:
-			return <div className="w-6 h-6 rounded-full bg-yellow-500"></div>;
+			return (
+				<div className="w-6 h-6 rounded-full">
+					<CircleAlert />
+				</div>
+			);
 		default:
-			return <div className="w-6 h-6 rounded-full bg-green-500"></div>;
+			return (
+				<div className="w-6 h-6 rounded-full">
+					<CircleCheck />
+				</div>
+			);
 	}
 };
 
@@ -28,24 +45,16 @@ interface MiniCardProps {
 }
 
 const MiniCard = ({ domain, tld }: MiniCardProps) => {
-	const [status, setStatus] = React.useState<number | null>(null);
-	const [innerWidth, setInnerWidth] = React.useState(
+	const [status, setStatus] = useState<number | null>(null);
+	const [innerWidth, setInnerWidth] = useState(
 		typeof window !== "undefined" ? window.innerWidth : 1080,
 	);
 
-	React.useEffect(() => {
+	useEffect(() => {
 		const handleResize = () => setInnerWidth(window.innerWidth);
 		window.addEventListener("resize", handleResize);
 		return () => window.removeEventListener("resize", handleResize);
 	}, []);
-
-	const updateMaxDomainLen = () => {
-		if (!document.getElementById("url")) return 8;
-		const cardWidth = document.getElementById("url")!.offsetWidth;
-		const tldWidthEstimate = tld.length * 8;
-		const availableWidth = cardWidth - tldWidthEstimate - 20;
-		return Math.max(0, Math.floor(availableWidth / 7));
-	};
 
 	const checkDomainStatus = async (url: string) => {
 		try {
@@ -65,12 +74,12 @@ const MiniCard = ({ domain, tld }: MiniCardProps) => {
 		}
 	};
 
-	React.useEffect(() => {
+	useEffect(() => {
 		const url = `${domain.toLowerCase()}.${tld.toLowerCase()}`;
 		checkDomainStatus(url);
 	}, [domain, tld]);
 
-	const maxDomainLen = updateMaxDomainLen();
+	const maxDomainLen = 480;
 
 	const displayedDomain =
 		domain.length >= maxDomainLen && innerWidth > 480
@@ -78,15 +87,27 @@ const MiniCard = ({ domain, tld }: MiniCardProps) => {
 			: domain.substring(0, maxDomainLen);
 
 	return (
-		<div className="bg-white p-4 rounded-lg shadow-md w-full mb-4 flex justify-between items-center border border-gray-200">
-			<div id="url" className="flex-grow">
-				{displayedDomain}
-				<strong>.{tld.toLowerCase()}</strong>
+		<Link
+			href={`https://${domain.toLowerCase()}.${tld.toLowerCase()}`}
+			target="_blank"
+			rel="noopener noreferrer"
+		>
+			<div
+				className={cn(
+					"bg-green-200 p-4 rounded-lg shadow-md w-full mb-4 flex justify-between items-center border border-gray-200",
+					status === 0 && "opacity-50 bg-red-200",
+					status === 2 || status === 5 ? "bg-yellow-200" : "",
+				)}
+			>
+				<div id="url" className="flex-grow">
+					{displayedDomain}
+					<strong>.{tld.toLowerCase()}</strong>
+				</div>
+				<div className="ml-4">
+					<StatusIndicator status={status} />
+				</div>
 			</div>
-			<div className="ml-4">
-				<StatusIndicator status={status} />
-			</div>
-		</div>
+		</Link>
 	);
 };
 

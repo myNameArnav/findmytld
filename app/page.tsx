@@ -3,14 +3,13 @@
 import SearchForm from "./components/SearchForm";
 import MiniCard from "./components/MiniCard";
 import tlds from "./utils/tlds.json";
-import React from "react";
-import { TopLevelDomainCategorization } from "./types/tlds";
+
+import type { TopLevelDomainCategorization } from "./types/tlds";
+import { useQueryState } from "nuqs";
 
 export default function Home() {
-	const [domain, setDomain] = React.useState("");
-	const [tldList, setTldList] = React.useState<TopLevelDomainCategorization>(
-		tlds.data,
-	);
+	const [domain, setDomain] = useQueryState("domain", { defaultValue: "" });
+	const tldList: TopLevelDomainCategorization = tlds.data;
 
 	const allTLDs = [
 		...tldList.country_code_tlds.domains,
@@ -45,15 +44,17 @@ export default function Home() {
 		<div className="container mx-auto px-4 py-8 text-center">
 			<SearchForm initialValue={domain} onSubmit={handleSearchSubmit} />
 
-			<div className="mt-12">
-				<ol className="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-					{allTLDs.map((tld) => (
-						<li key={tld} className="list-none">
-							<MiniCard domain={domain} tld={tld} />
-						</li>
-					))}
-				</ol>
-			</div>
+			{!!domain && (
+				<div className="mt-12">
+					<ol className="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+						{allTLDs.map((tld) => (
+							<li key={tld} className="list-none">
+								<MiniCard domain={domain} tld={tld} />
+							</li>
+						))}
+					</ol>
+				</div>
+			)}
 		</div>
 	);
 }

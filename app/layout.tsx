@@ -1,5 +1,6 @@
 import "./globals.css";
 import Header from "./components/Header";
+import { NuqsAdapter } from "nuqs/adapters/next/app";
 
 export const metadata = {
 	title: "Find My TLD",
@@ -32,7 +33,7 @@ export default function RootLayout({
 			<body className="bg-gray-50 min-h-screen flex flex-col">
 				<Header />
 				<main className="flex-grow container mx-auto px-4 py-8">
-					{children}
+					<NuqsAdapter>{children}</NuqsAdapter>
 				</main>
 				<Footer />
 			</body>
