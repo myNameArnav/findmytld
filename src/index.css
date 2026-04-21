@@ -1,0 +1,12 @@
+@import 'tailwindcss';
+
+@theme {
+	--color-primary: #3498db;
+	--color-primary-dark: #0056b3;
+	--color-success: #4caf50;
+	--color-failure: #f44336;
+	--color-loading: #36a8f4;
+	--color-warning: #f4f136;
+	--font-grotesk: 'Space Grotesk', sans-serif;
+	--font-playwrite: 'Playwrite DE Grund', cursive;
+}
